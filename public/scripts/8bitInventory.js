@@ -5,7 +5,12 @@ var colors = [ 'red', 'orange', 'yellow', 'green', 'mermaid treasure', 'blue', '
 ////// global array of items in inventory //////
 var items = [];
 
+
 $( document ).ready( function(){
+  var colorIn = $("colorIn").val();
+  var nameIn= $("nameIn").val();
+  var sizeIn= $("sizeIn").val() ;
+
   var addObject = function( colorIn, nameIn, sizeIn ){
     console.log( 'in addObject' );
     // assemble object from new fields
@@ -17,11 +22,43 @@ $( document ).ready( function(){
     console.log( 'adding:', newItem );
     ////// TODO: add ajax call to addItem route to add this item to the table
     // add to items array
-    items.push( newItem );
-  }; // end addObject
+    $.ajax({
+    type: "POST",
+    url: "/addItem",
+    data: newItem,
+    success: function( response){
+      console.log( 'back from post call:', response );
+    }, // end success
+    error: function(){
+      console.log( 'error with ajax call...');
+    } // end error
+  }); // end ajax
+   items.push( newItem );
+}; // end addObject
 
-  var findObject = function( colorCheck, sizeCheck ){
-    console.log( 'in findObject. Looking for:', colorCheck, sizeCheck );
+
+var getObjects = function(){
+  console.log( 'in getObjects');
+  // populate the items array
+  ////// TODO: replace the stuff in this function with getting items from the database ////////
+  ////// hint: make a get call to the getInventory and use it's response data to fill the items array ////////\
+  // test get function
+$.ajax({
+  type: 'GET',
+  url: '/getInventory',
+  success: function( response ){
+    console.log( 'back from get call:', response );
+    // displayMatches( response );
+  }, // end success
+  error: function(){
+    console.log( 'error with ajax call...');
+  } // end error
+}); // end ajax
+items.push( response );
+}; // end getInventory
+
+  var searchInventory = function( colorCheck, sizeCheck ){
+    console.log( 'in searchInventory. Looking for:', colorCheck, sizeCheck );
     // array of matches
     var matches = [];
     for ( var i = 0; i < items.length; i++ ) {
@@ -32,19 +69,22 @@ $( document ).ready( function(){
     } // end for
     console.log( 'matches:', matches );
     ////// TODO: display matches
-  }; // end findObject
+    displayMatches(matches);
+  }; // end searchInventory
 
-  var getObjects = function(){
-    console.log( 'in getObjects');
-    // populate the items array
-    ////// TODO: replace the stuff in this function with getting items from the database ////////
-    ////// hint: make a get call to the getInventory and use it's response data to fill the items array ////////
-  }; // end getObjects
+var displayMatches = function( allMatches ){
+  // empty outputDiv
+  $( '#outputDiv' ).html( '' );
+  var outputText = '';
+  for (var i = 0; i < allMatches.length; i++) {
+    $( '#outputDiv' ).append( '<p>' + allMatches[i].name + '</p>' );
+  } // end for
+}; // end displayMatches
 
   // get objects when doc is ready
   getObjects();
-  // the below are tests to show what is returned when running findObject
-  addObject( 'blue', 'blueberry', 'small' )
-  findObject( 'blue', 'small' );
-  findObject( 'blue', 'large' );
+  // the below are tests to show what is returned when running searchInventory
+  addObject( 'blue', 'blueberry', 'small' );
+  searchInventory( 'blue', 'small' );
+  searchInventory( 'blue', 'large' );
 }); // end doc ready
