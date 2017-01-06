@@ -2,6 +2,7 @@ var express = require( 'express' );
 var app = express();
 var path = require( 'path' );
 var bodyParser = require( 'body-parser' );
+var pg = require( 'pg' );
 var urlEncodedParser = bodyParser.urlencoded( { extended: false } );
 var port = process.env.PORT || 3003;
 var connectionString = 'postgres://localhost:5432/inventory';
@@ -26,18 +27,16 @@ app.post( '/addItem', urlEncodedParser, function( req, res ){
       else{
         console.log( 'connected to db' );
         // use wildcards to insert record
-        client.query( 'INSERT INTO inventory ( item, color, size ) values ( $1, $2, $3 )', [ req.body.name, req.body.color, req.body.size] );
+        client.query( 'INSERT INTO items ( item, color, size ) values ( $1, $2, $3 )', [ req.body.name, req.body.color, req.body.size] );
         done();
         res.send( 'post is in' );
       }
     }); // end db connection
   }); // endPost
-  // add the item from req.body to the table?
-}); // end addItem route
 
 // get all objects in the inventory
-app.get( '/getInventory', function( req, res ){
-  console.log( 'getInventory route hit' );
+app.get( '/getItems', function( req, res ){
+  console.log( 'getItems route hit' );
   // get all items in the table and return them to client
   // connect to db
   pg.connect( connectionString, function( err, client, done ){
@@ -46,7 +45,7 @@ app.get( '/getInventory', function( req, res ){
     } // end error
     else{
       console.log( 'connected to db' );
-      var query = client.query( 'SELECT * from inventory') ;
+      var query = client.query( 'SELECT * from items') ;
       // array for inventory items
       var inventoryItems = [];
       query.on( 'row', function( row ){
@@ -59,13 +58,11 @@ app.get( '/getInventory', function( req, res ){
         // send back data
         console.log( inventoryItems );
         // will this work?
-        res.send( iventoryItems );
+        res.send( inventoryItems );
       });
     } // end no error
   }); // end connect
   }); // end testGet
-
-}); // end addItem route
 
 // static folder
 app.use( express.static( 'public' ) );

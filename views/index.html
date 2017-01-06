@@ -4,15 +4,15 @@
 <head>
     <meta charset="utf-8">
     <title>8-Bit Inventory Launchpad</title>
-    <script src="../public/vendors/jquery-3.0.0.min.js" charset="utf-8"></script>
-    <script src="../public/scripts/8bitInventory.js" charset="utf-8"></script>
+    <script src="/vendors/jquery-3.0.0.min.js" charset="utf-8"></script>
+    <script src="/scripts/8bitInventory.js" charset="utf-8"></script>
 </head>
 
 <body>
     <div>
-        <h1>8-Bit Inventory Launchpad</h1>
+        <h1>Do You Have This?</h1>
         <input type="text" id='nameIn' placeholder='name of item'>
-        <select id='colorIn'>
+        <select class='color-in'>
     <option value="Red">Red</option>
     <option value="Yellow">Yellow</option>
     <option value="Green">Green</option>
@@ -20,13 +20,31 @@
     <option value="mermaid treasure">Mermaid Treasure</option>
     <option value="Purple">Purple</option>
   </select>
-        <select id='sizeIn'>
+        <select class='size-in'>
   <option value="small">Small</option>
   <option value="medium">Medium</option>
   <option value="large">Large</option>
   </select>
-        <button id="addItem" type="button" name="button"> Add Item</button>
-        <button id="searchItem"> Search Inventory</button>
+        <button id="addItem"> Add Item</button>
+    </div>
+    <div>
+    <input type="text" id='searchName' placeholder='name of item'>
+    <select class='search-color'>
+<option value="Red">Red</option>
+<option value="Yellow">Yellow</option>
+<option value="Green">Green</option>
+<option value="Blue">Blue</option>
+<option value="mermaid treasure">Mermaid Treasure</option>
+<option value="Purple">Purple</option>
+</select>
+    <select class='search-size'>
+<option value="small">Small</option>
+<option value="medium">Medium</option>
+<option value="large">Large</option>
+</select>
+      <button id="searchItem"> Search Inventory</button>
+    </div>
+    <div id="outputDiv">
     </div>
 </body>
 
